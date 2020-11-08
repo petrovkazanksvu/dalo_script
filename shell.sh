@@ -1,10 +1,10 @@
 #!/bin/bash
-sudo apt-get update
-apt-get install freeradius-mysql mysql-server mysql-client
+sudo apt-get -y  update
+apt-get -y install freeradius-mysql mysql-server mysql-client
 mysql --defaults-extra-file=./config_file
-mysql -u root -pqwe123 -e "CREATE DATABASE radius4 CHARACTER SET UTF8 COLLATE UTF8_BIN;CREATE USER 'radius4'@'%' IDENTIFIED BY 'kamisama123';GRANT ALL PRIVILEGES ON radius4.* TO 'radius4'@'%';"
+mysql -u root -pqwe123 -e "CREATE DATABASE radius4 CHARACTER SET UTF8 COLLATE UTF8_BIN;CREATE USER 'radius'@'%' IDENTIFIED BY 'kamisama123';GRANT ALL PRIVILEGES ON radius.* TO 'radius'@'%';"
 updatedb
-mysql -u radius -pradius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
+mysql -u radius -pkamisama123 radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
 ln -s /etc/freeradius/3.0/mods-available/sql  /etc/freeradius/3.0/mods-enabled/
 sed -i 's/ERROR/DEBUG/; s/loglevelerror/logleveldebug/' filename
 #: <<'END_COMMENT'
