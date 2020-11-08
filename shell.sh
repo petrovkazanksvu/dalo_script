@@ -1,13 +1,10 @@
 #!/bin/bash
 sudo apt-get -y  update
 apt-get -y install freeradius-mysql mysql-server mysql-client
-#mysql --defaults-extra-file=./config_file
 mysql -u root -pqwe123 -e "CREATE DATABASE radius CHARACTER SET UTF8 COLLATE UTF8_BIN;CREATE USER 'radius'@'%' IDENTIFIED BY 'kamisama123';GRANT ALL PRIVILEGES ON radius.* TO 'radius'@'%';"
 updatedb
 mysql -u radius -pkamisama123 radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
 ln -s /etc/freeradius/3.0/mods-available/sql  /etc/freeradius/3.0/mods-enabled/
-#sed -i 's/ERROR/DEBUG/; s/loglevelerror/logleveldebug/' filename
-#: <<'END_COMMENT'
 sed -i -e 's/driver = "rlm_sql_null"/driver = "rlm_sql_mysql"/;'`
          `'s/dialect = "sqlite"/dialect = "mysql"/;'`
          `'s/#\x09server = "localhost"/\x09server = "localhost"/;'`
@@ -16,7 +13,6 @@ sed -i -e 's/driver = "rlm_sql_null"/driver = "rlm_sql_mysql"/;'`
          `'s/#\x09password = "radpass"/\x09password = "kamisama123"/;'`
          `'s/#\x09read_clients = yes/\x09read_clients = yes/'`
          ` /etc/freeradius/3.0/mods-enabled/sql
-#END_COMMENT
 service freeradius restart
 apt-get -y install apache2 php libapache2-mod-php php-mysql unzip
 apt-get -y install php-pear php-db php-mail php-gd php-common php-mail-mime
